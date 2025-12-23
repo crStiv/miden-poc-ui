@@ -17,14 +17,23 @@ export default function AddressBook({
   });
 
   const addToAddressBook = () => {
-    if (newContact.name && newContact.address) {
-      setAddressBook([...addressBook, newContact]);
-      setNewContact({ name: "", address: "" });
+    const trimmedName = newContact.name.trim();
+    const trimmedAddress = newContact.address.trim();
+
+    if (!trimmedName || !trimmedAddress) {
+      toast.error("Please fill in both name and address fields");
+      return;
     }
+
+    setAddressBook([...addressBook, { name: trimmedName, address: trimmedAddress }]);
+    setNewContact({ name: "", address: "" });
+    toast.success("Contact added successfully");
   };
 
   const removeFromAddressBook = (index: number) => {
+    const contact = addressBook[index];
     setAddressBook(addressBook.filter((_, i) => i !== index));
+    toast.success(`Contact "${contact.name}" removed successfully`);
   };
 
   return (
